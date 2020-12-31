@@ -26,23 +26,26 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Run tests
         steps:
         - uses: actions/checkout@v2
+        
         - name: Setup .NET
           uses: actions/setup-dotnet@v1
           with:
             dotnet-version: 5.0.101
+        
         - name: Restore dependencies
           run: dotnet restore
+        
         - name: Build
           run: dotnet build --no-restore
+        
         - name: Test
           run: dotnet test --no-build --verbosity normal
 
   # Push image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
-  docker-putsh:
+  docker-push:
     # Ensure test job passes before pushing image.
     needs: test
 
