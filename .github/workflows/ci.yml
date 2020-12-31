@@ -1,10 +1,10 @@
-name: .NET
+name: CI .NET
 
 on:
   push:
     branches: [ main ]
+  # Run tests for any PRs.
   pull_request:
-    branches: [ main ]
 
 jobs:
   build:
