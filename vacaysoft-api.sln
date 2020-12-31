@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VacaySoft.Api", "src\VacayS
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8D4F4959-E15D-4131-B3A1-3AACAA5EDE5B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{353A90D5-3996-47C7-BBFF-BADDEFD386B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VacaySoft.Api.Tests", "tests\VacaySoft.Api.Tests\VacaySoft.Api.Tests.csproj", "{34B5976F-4D96-4077-B7BD-AB49BB989FD5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,12 +21,17 @@ Global
 		{7BB46F8B-3A6B-4A06-9BA4-10452F3CB1A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7BB46F8B-3A6B-4A06-9BA4-10452F3CB1A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7BB46F8B-3A6B-4A06-9BA4-10452F3CB1A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34B5976F-4D96-4077-B7BD-AB49BB989FD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34B5976F-4D96-4077-B7BD-AB49BB989FD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34B5976F-4D96-4077-B7BD-AB49BB989FD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34B5976F-4D96-4077-B7BD-AB49BB989FD5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{7BB46F8B-3A6B-4A06-9BA4-10452F3CB1A8} = {8D4F4959-E15D-4131-B3A1-3AACAA5EDE5B}
+		{34B5976F-4D96-4077-B7BD-AB49BB989FD5} = {353A90D5-3996-47C7-BBFF-BADDEFD386B6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5937E754-00D1-43FA-930B-3A5CAB537133}
