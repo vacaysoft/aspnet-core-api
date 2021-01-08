@@ -14,7 +14,8 @@ on:
   pull_request:
 
 jobs:
-  build-and-deploy:
+  build:
+    name: Docker Build
     runs-on: ubuntu-latest
     steps:
     # checkout the repo
@@ -35,7 +36,14 @@ jobs:
     - run: |
         docker build . --file src/VacaySoft.Api/Dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/vacaysoft-api:${{ github.sha }}
         docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/vacaysoft-api:${{ github.sha }}
-
+  
+  development:
+    needs: build
+    name: Deploy to Development
+    environment:
+        name: development
+    runs-on: ubuntu-latest
+    steps:
     - name: Azure WebApp
       uses: Azure/webapps-deploy@v2
       with:
@@ -60,8 +68,74 @@ jobs:
         app-name: vacaysoft-api
         mask-inputs: false
         slot-name: develop  # Optional and needed only if the settings have to be configured on the specific deployment slot
-        app-settings-json: '[{ "name": "version", "value": "${{ github.sha }}", "slotSetting": true }]'
+        app-settings-json: '[{ "name": "tag", "value": "${{ github.sha }}", "slotSetting": true },{ "name": "ASPNETCORE_ENVIRONMENT", "value": "Development", "slotSetting": true }]'
       id: settings
 
+  staging:
+    needs: development
+    name: Deploy to staging
+    environment:
+        name: development
+    runs-on: ubuntu-latest
+    steps:
+    - name: Azure WebApp
+      uses: Azure/webapps-deploy@v2
+      with:
+        # Name of the Azure Web App
+        app-name: vacaysoft-api
+        # Applies to Web Apps(Windows and Linux) and Web App Containers(linux). Multi container scenario not supported. Publish profile (*.publishsettings) file contents with Web Deploy secrets
+        publish-profile: ${{ secrets.PUBLISHING_PROFILE }}# optional
+        # Enter an existing Slot other than the Production slot
+        slot-name: staging # optional, default is production
+        # Applies to Web App only: Path to package or folder. *.zip, *.war, *.jar or a folder to deploy
+        #package: # optional, default is .
+        # Applies to Web App Containers only: Specify the fully qualified container image(s) name. For example, 'myregistry.azurecr.io/nginx:latest' or 'python:3.7.2-alpine/'. For multi-container scenario multiple container image names can be provided (multi-line separated)
+        images: ${{ secrets.REGISTRY_LOGIN_SERVER }}/vacaysoft-api:${{ github.sha }}
+        # Applies to Web App Containers only: Path of the Docker-Compose file. Should be a fully qualified path or relative to the default working directory. Required for multi-container scenario
+        #configuration-file: # optional
+        # Enter the start up command. For ex. dotnet run or dotnet run
+        #startup-command: # optional
 
+    - name: Update Settings
+      uses: azure/appservice-settings@v1
+      with:
+        app-name: vacaysoft-api
+        mask-inputs: false
+        slot-name: develop  # Optional and needed only if the settings have to be configured on the specific deployment slot
+        app-settings-json: '[{ "name": "tag", "value": "${{ github.sha }}", "slotSetting": true },{ "name": "ASPNETCORE_ENVIRONMENT", "value": "Development", "slotSetting": true }]'
+      id: settings
+
+  production:
+    needs: staging
+    name: Deploy to production
+    environment:
+        name: development
+    runs-on: ubuntu-latest
+    steps:
+    - name: Azure WebApp
+      uses: Azure/webapps-deploy@v2
+      with:
+        # Name of the Azure Web App
+        app-name: vacaysoft-api
+        # Applies to Web Apps(Windows and Linux) and Web App Containers(linux). Multi container scenario not supported. Publish profile (*.publishsettings) file contents with Web Deploy secrets
+        publish-profile: ${{ secrets.PUBLISHING_PROFILE }}# optional
+        # Enter an existing Slot other than the Production slot
+        #slot-name: # optional, default is production
+        # Applies to Web App only: Path to package or folder. *.zip, *.war, *.jar or a folder to deploy
+        #package: # optional, default is .
+        # Applies to Web App Containers only: Specify the fully qualified container image(s) name. For example, 'myregistry.azurecr.io/nginx:latest' or 'python:3.7.2-alpine/'. For multi-container scenario multiple container image names can be provided (multi-line separated)
+        images: ${{ secrets.REGISTRY_LOGIN_SERVER }}/vacaysoft-api:${{ github.sha }}
+        # Applies to Web App Containers only: Path of the Docker-Compose file. Should be a fully qualified path or relative to the default working directory. Required for multi-container scenario
+        #configuration-file: # optional
+        # Enter the start up command. For ex. dotnet run or dotnet run
+        #startup-command: # optional
+
+    - name: Update Settings
+      uses: azure/appservice-settings@v1
+      with:
+        app-name: vacaysoft-api
+        mask-inputs: false
+        slot-name: develop  # Optional and needed only if the settings have to be configured on the specific deployment slot
+        app-settings-json: '[{ "name": "tag", "value": "${{ github.sha }}", "slotSetting": true }]'
+      id: settings
 
