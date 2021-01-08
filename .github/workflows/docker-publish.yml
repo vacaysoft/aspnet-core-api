@@ -6,10 +6,6 @@ on:
     branches:
       - main
 
-    # Publish `v1.2.3` tags as releases.
-    tags:
-      - v*
-
   # Run tests for any PRs.
   pull_request:
 
@@ -83,6 +79,11 @@ jobs:
     environment: Staging
     runs-on: ubuntu-latest
     steps:
+    - name: 'Login via Azure CLI'
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
     - name: Azure WebApp
       uses: Azure/webapps-deploy@v2
       with:
@@ -116,6 +117,11 @@ jobs:
     environment: Production
     runs-on: ubuntu-latest
     steps:
+    - name: 'Login via Azure CLI'
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
     - name: Azure WebApp
       uses: Azure/webapps-deploy@v2
       with:
