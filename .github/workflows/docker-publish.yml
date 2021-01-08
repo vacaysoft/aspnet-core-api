@@ -41,10 +41,15 @@ jobs:
     needs: build
     name: Deploy to Development
     environment: 
-      name: development
+      name: Develop
       url: https://vacaysoft-api-develop.azurewebsites.net/swagger/index.html
     runs-on: ubuntu-latest
     steps:
+    - name: 'Login via Azure CLI'
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
     - name: Azure WebApp
       uses: Azure/webapps-deploy@v2
       with:
@@ -75,7 +80,7 @@ jobs:
   staging:
     needs: development
     name: Deploy to staging
-    environment: staging
+    environment: Staging
     runs-on: ubuntu-latest
     steps:
     - name: Azure WebApp
@@ -108,7 +113,7 @@ jobs:
   production:
     needs: staging
     name: Deploy to production
-    environment: production
+    environment: Production
     runs-on: ubuntu-latest
     steps:
     - name: Azure WebApp
