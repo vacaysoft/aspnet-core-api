@@ -40,7 +40,9 @@ jobs:
   development:
     needs: build
     name: Deploy to Development
-    environment: development
+    environment: 
+      name: development
+      url: https://vacaysoft-api-develop.azurewebsites.net/swagger/index.html
     runs-on: ubuntu-latest
     steps:
     - name: Azure WebApp
