@@ -33,12 +33,12 @@ jobs:
         docker build . --file src/VacaySoft.Api/Dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/vacaysoft-api:${{ github.sha }}
         docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/vacaysoft-api:${{ github.sha }}
   
-  development:
+  develop:
     needs: build
     name: Deploy to Development
     environment: 
       name: Develop
-      url: https://vacaysoft-api-develop.azurewebsites.net/swagger/index.html
+      url: https://vacaysoft-api-develop.azurewebsites.net/swagger
     runs-on: ubuntu-latest
     steps:
     - name: 'Login via Azure CLI'
@@ -74,9 +74,11 @@ jobs:
       id: settings
 
   staging:
-    needs: development
+    needs: develop
     name: Deploy to staging
-    environment: Staging
+    environment:
+      name: Staging
+      url: https://vacaysoft-api-staging.azurewebsites.net/swagger
     runs-on: ubuntu-latest
     steps:
     - name: 'Login via Azure CLI'
@@ -107,7 +109,7 @@ jobs:
       with:
         app-name: vacaysoft-api
         mask-inputs: false
-        slot-name: develop  # Optional and needed only if the settings have to be configured on the specific deployment slot
+        slot-name: staging  # Optional and needed only if the settings have to be configured on the specific deployment slot
         app-settings-json: '[{ "name": "tag", "value": "${{ github.sha }}", "slotSetting": true },{ "name": "ASPNETCORE_ENVIRONMENT", "value": "Development", "slotSetting": true }]'
       id: settings
 
@@ -145,7 +147,7 @@ jobs:
       with:
         app-name: vacaysoft-api
         mask-inputs: false
-        slot-name: develop  # Optional and needed only if the settings have to be configured on the specific deployment slot
+        #slot-name: # Optional and needed only if the settings have to be configured on the specific deployment slot
         app-settings-json: '[{ "name": "tag", "value": "${{ github.sha }}", "slotSetting": true }]'
       id: settings
 
