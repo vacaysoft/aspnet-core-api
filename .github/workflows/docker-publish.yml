@@ -75,7 +75,7 @@ jobs:
     needs: development
     name: Deploy to staging
     environment:
-        name: development
+        name: staging
     runs-on: ubuntu-latest
     steps:
     - name: Azure WebApp
@@ -109,7 +109,7 @@ jobs:
     needs: staging
     name: Deploy to production
     environment:
-        name: development
+        name: production
     runs-on: ubuntu-latest
     steps:
     - name: Azure WebApp
