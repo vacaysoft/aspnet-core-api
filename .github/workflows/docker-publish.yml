@@ -53,3 +53,15 @@ jobs:
         #configuration-file: # optional
         # Enter the start up command. For ex. dotnet run or dotnet run
         #startup-command: # optional
+
+    - name: Update Settings
+      uses: azure/appservice-settings@v1
+      with:
+        app-name: vacaysoft-api
+        mask-inputs: false
+        slot-name: 'vacaysoft-api-vacaysoft-api-dev'  # Optional and needed only if the settings have to be configured on the specific deployment slot
+        app-settings-json: '[{ "name": "version", "value": "${{ github.sha }}", "slotSetting": true }]'
+      id: settings
+
+
+
