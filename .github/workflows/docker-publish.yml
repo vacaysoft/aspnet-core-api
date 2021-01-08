@@ -44,7 +44,7 @@ jobs:
         # Applies to Web Apps(Windows and Linux) and Web App Containers(linux). Multi container scenario not supported. Publish profile (*.publishsettings) file contents with Web Deploy secrets
         publish-profile: ${{ secrets.PUBLISHING_PROFILE }}# optional
         # Enter an existing Slot other than the Production slot
-        slot-name: vacaysoft-api-vacaysoft-api-dev # optional, default is production
+        slot-name: develop # optional, default is production
         # Applies to Web App only: Path to package or folder. *.zip, *.war, *.jar or a folder to deploy
         #package: # optional, default is .
         # Applies to Web App Containers only: Specify the fully qualified container image(s) name. For example, 'myregistry.azurecr.io/nginx:latest' or 'python:3.7.2-alpine/'. For multi-container scenario multiple container image names can be provided (multi-line separated)
@@ -59,7 +59,7 @@ jobs:
       with:
         app-name: vacaysoft-api
         mask-inputs: false
-        slot-name: 'vacaysoft-api-vacaysoft-api-dev'  # Optional and needed only if the settings have to be configured on the specific deployment slot
+        slot-name: develop  # Optional and needed only if the settings have to be configured on the specific deployment slot
         app-settings-json: '[{ "name": "version", "value": "${{ github.sha }}", "slotSetting": true }]'
       id: settings
 
