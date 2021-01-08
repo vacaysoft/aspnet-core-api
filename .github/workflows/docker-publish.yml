@@ -36,14 +36,20 @@ jobs:
         docker build . --file src/VacaySoft.Api/Dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/vacaysoft-api:${{ github.sha }}
         docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/vacaysoft-api:${{ github.sha }}
 
-    - name: 'Deploy to Azure Container Instances'
-      uses: 'azure/aci-deploy@v1'
+    - name: Azure WebApp
+      uses: Azure/webapps-deploy@v2
       with:
-        resource-group: ${{ secrets.RESOURCE_GROUP }}
-        dns-name-label: ${{ secrets.RESOURCE_GROUP }}${{ github.run_number }}
-        image: ${{ secrets.REGISTRY_LOGIN_SERVER }}/sampleapp:${{ github.sha }}
-        registry-login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
-        registry-username: ${{ secrets.REGISTRY_USERNAME }}
-        registry-password: ${{ secrets.REGISTRY_PASSWORD }}
-        name: vacaysoft-api
-        location: 'southeast asia'
+        # Name of the Azure Web App
+        app-name: vacaysoft-api
+        # Applies to Web Apps(Windows and Linux) and Web App Containers(linux). Multi container scenario not supported. Publish profile (*.publishsettings) file contents with Web Deploy secrets
+        publish-profile: ${{ secrets.PUBLISHING_PROFILE }}# optional
+        # Enter an existing Slot other than the Production slot
+        slot-name: vacaysoft-api-vacaysoft-api-dev # optional, default is production
+        # Applies to Web App only: Path to package or folder. *.zip, *.war, *.jar or a folder to deploy
+        #package: # optional, default is .
+        # Applies to Web App Containers only: Specify the fully qualified container image(s) name. For example, 'myregistry.azurecr.io/nginx:latest' or 'python:3.7.2-alpine/'. For multi-container scenario multiple container image names can be provided (multi-line separated)
+        images: ${{ secrets.REGISTRY_LOGIN_SERVER }}/vacaysoft-api:${{ github.sha }}
+        # Applies to Web App Containers only: Path of the Docker-Compose file. Should be a fully qualified path or relative to the default working directory. Required for multi-container scenario
+        #configuration-file: # optional
+        # Enter the start up command. For ex. dotnet run or dotnet run
+        #startup-command: # optional
