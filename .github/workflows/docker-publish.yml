@@ -24,6 +24,8 @@ jobs:
     - run: |
         docker build . --file src/VacaySoft.Api/Dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/vacaysoft-api:0.0.${{ github.run_number }}
         docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/vacaysoft-api:0.0.${{ github.run_number }}
+        docker build . --file src/VacaySoft.Api/Dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/vacaysoft-api:latest
+        docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/vacaysoft-api:latest
   
   develop:
     needs: build
@@ -50,7 +52,7 @@ jobs:
         # Applies to Web App only: Path to package or folder. *.zip, *.war, *.jar or a folder to deploy
         #package: # optional, default is .
         # Applies to Web App Containers only: Specify the fully qualified container image(s) name. For example, 'myregistry.azurecr.io/nginx:latest' or 'python:3.7.2-alpine/'. For multi-container scenario multiple container image names can be provided (multi-line separated)
-        images: ${{ secrets.REGISTRY_LOGIN_SERVER }}/vacaysoft-api:0.0.${{ github.run_number }}
+        images: ${{ secrets.REGISTRY_LOGIN_SERVER }}/vacaysoft-api:latest
         # Applies to Web App Containers only: Path of the Docker-Compose file. Should be a fully qualified path or relative to the default working directory. Required for multi-container scenario
         #configuration-file: # optional
         # Enter the start up command. For ex. dotnet run or dotnet run
@@ -102,7 +104,7 @@ jobs:
         # Applies to Web App only: Path to package or folder. *.zip, *.war, *.jar or a folder to deploy
         #package: # optional, default is .
         # Applies to Web App Containers only: Specify the fully qualified container image(s) name. For example, 'myregistry.azurecr.io/nginx:latest' or 'python:3.7.2-alpine/'. For multi-container scenario multiple container image names can be provided (multi-line separated)
-        images: ${{ secrets.REGISTRY_LOGIN_SERVER }}/vacaysoft-api:0.0.${{ github.run_number }}
+        images: ${{ secrets.REGISTRY_LOGIN_SERVER }}/vacaysoft-api:latest
         # Applies to Web App Containers only: Path of the Docker-Compose file. Should be a fully qualified path or relative to the default working directory. Required for multi-container scenario
         #configuration-file: # optional
         # Enter the start up command. For ex. dotnet run or dotnet run
@@ -152,7 +154,7 @@ jobs:
         # Applies to Web App only: Path to package or folder. *.zip, *.war, *.jar or a folder to deploy
         #package: # optional, default is .
         # Applies to Web App Containers only: Specify the fully qualified container image(s) name. For example, 'myregistry.azurecr.io/nginx:latest' or 'python:3.7.2-alpine/'. For multi-container scenario multiple container image names can be provided (multi-line separated)
-        images: ${{ secrets.REGISTRY_LOGIN_SERVER }}/vacaysoft-api:0.0.${{ github.run_number }}
+        images: ${{ secrets.REGISTRY_LOGIN_SERVER }}/vacaysoft-api:latest
         # Applies to Web App Containers only: Path of the Docker-Compose file. Should be a fully qualified path or relative to the default working directory. Required for multi-container scenario
         #configuration-file: # optional
         # Enter the start up command. For ex. dotnet run or dotnet run
