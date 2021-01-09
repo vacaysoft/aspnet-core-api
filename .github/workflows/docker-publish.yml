@@ -14,12 +14,7 @@ jobs:
     # checkout the repo
     - name: 'Checkout GitHub Action'
       uses: actions/checkout@main
-
-    - name: 'Login via Azure CLI'
-      uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-
+      
     - name: 'Build and push image'
       uses: azure/docker-login@v1
       with:
@@ -69,11 +64,6 @@ jobs:
         slot-name: develop  # Optional and needed only if the settings have to be configured on the specific deployment slot
         app-settings-json: |
           [
-            { 
-              "name": "Tag",
-              "value": "${{ github.sha }}",
-              "slotSetting": true 
-            },
             {
               "name": "ASPNETCORE_ENVIRONMENT",
               "value": "Development",
@@ -124,7 +114,19 @@ jobs:
         app-name: vacaysoft-api
         mask-inputs: false
         slot-name: staging  # Optional and needed only if the settings have to be configured on the specific deployment slot
-        app-settings-json: '[{ "name": "Tag", "value": "${{ github.sha }}", "slotSetting": true },{ "name": "ASPNETCORE_ENVIRONMENT", "value": "Development", "slotSetting": true },{ "name": "Version", "value": "0.0.${{ github.run_number }}", "slotSetting": true }]'
+        app-settings-json: |
+          [
+            {
+              "name": "ASPNETCORE_ENVIRONMENT",
+              "value": "Development",
+              "slotSetting": true 
+            },
+            {
+              "name": "Version",
+              "value": "0.0.${{ github.run_number }}",
+              "slotSetting": true 
+            }
+          ]
       id: settings
 
   production:
@@ -162,6 +164,13 @@ jobs:
         app-name: vacaysoft-api
         mask-inputs: false
         #slot-name: # Optional and needed only if the settings have to be configured on the specific deployment slot
-        app-settings-json: '[{ "name": "Tag", "value": "${{ github.sha }}", "slotSetting": true },{ "name": "Version", "value": "0.0.${{ github.run_number }}", "slotSetting": true }]'
+        app-settings-json: |
+          [
+            {
+              "name": "Version",
+              "value": "0.0.${{ github.run_number }}",
+              "slotSetting": true 
+            }
+          ]
       id: settings
 
