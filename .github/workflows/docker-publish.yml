@@ -26,7 +26,7 @@ jobs:
         # GitHub token to push Docker image to GitHub Packages
         github-token: ${{ secrets.GITHUB_TOKEN }}
         # Docker Image name
-        image-name: vacaysoft/vacaysoft-api
+        image-name: vacaysoftapi
         # Docker Image tag
         image-tag: 0.0.${{ github.run_number }} # optional, default is latest
         # Extract git-tag from repository
