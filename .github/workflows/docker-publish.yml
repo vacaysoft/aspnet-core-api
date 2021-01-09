@@ -17,7 +17,15 @@ jobs:
     # checkout the repo
     - name: 'Checkout GitHub Action'
       uses: actions/checkout@main
-      
+
+    - name: Push to GitHub Packages
+      uses: docker/build-push-action@v1
+      with:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+        registry: ghcr.io
+        repository: vacaysoft/aspnet-core-api/vacaysoft-api
+
     - name: Build and publish Docker Image to GitHub Packages Registry
       # You may pin to the exact commit or the version.
       # uses: VaultVulp/gp-docker-action@abd86dfdcd23929f6195a0fd455769a73b7276da
@@ -26,7 +34,7 @@ jobs:
         # GitHub token to push Docker image to GitHub Packages
         github-token: ${{ secrets.GITHUB_TOKEN }}
         # Docker Image name
-        image-name: vacaysoftapi
+        image-name: vacaysoft-api
         # Docker Image tag
         image-tag: 0.0.${{ github.run_number }} # optional, default is latest
         # Extract git-tag from repository
@@ -38,23 +46,20 @@ jobs:
         # Pull the image before buiding it
         #pull-image: # optional, default is false
 
+    #- name: 'Login via Azure CLI'
+    #  uses: azure/login@v1
+    #  with:
+    #    creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-
-
-    - name: 'Login via Azure CLI'
-      uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-    - name: 'Build and push image'
-      uses: azure/docker-login@v1
-      with:
-        login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
-        username: ${{ secrets.REGISTRY_USERNAME }}
-        password: ${{ secrets.REGISTRY_PASSWORD }}
-    - run: |
-        docker build . --file src/VacaySoft.Api/Dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/vacaysoft-api:${{ github.sha }}
-        docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/vacaysoft-api:${{ github.sha }}
+    #- name: 'Build and push image'
+    #  uses: azure/docker-login@v1
+    #  with:
+    #    login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+    #    username: ${{ secrets.REGISTRY_USERNAME }}
+    #    password: ${{ secrets.REGISTRY_PASSWORD }}
+    #- run: |
+    #    docker build . --file src/VacaySoft.Api/Dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/vacaysoft-api:${{ github.sha }}
+    #    docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/vacaysoft-api:${{ github.sha }}
   
   develop:
     needs: build
@@ -93,7 +98,24 @@ jobs:
         app-name: vacaysoft-api
         mask-inputs: false
         slot-name: develop  # Optional and needed only if the settings have to be configured on the specific deployment slot
-        app-settings-json: '[{ "name": "Tag", "value": "${{ github.sha }}", "slotSetting": true },{ "name": "ASPNETCORE_ENVIRONMENT", "value": "Development", "slotSetting": true },{ "name": "Version", "value": "0.0.${{ github.run_number }}", "slotSetting": true }]'
+        app-settings-json: |
+          [
+            { 
+              "name": "Tag",
+              "value": "${{ github.sha }}",
+              "slotSetting": true 
+            },
+            {
+              "name": "ASPNETCORE_ENVIRONMENT",
+              "value": "Development",
+              "slotSetting": true 
+            },
+            {
+              "name": "Version",
+              "value": "0.0.${{ github.run_number }}",
+              "slotSetting": true 
+            }
+          ]'
       id: settings
 
   staging:
