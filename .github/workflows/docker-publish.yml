@@ -22,10 +22,8 @@ jobs:
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
     - run: |
-        docker build . --file src/VacaySoft.Api/Dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/vacaysoft-api:0.0.${{ github.run_number }}
-        docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/vacaysoft-api:0.0.${{ github.run_number }}
-        docker build . --file src/VacaySoft.Api/Dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/vacaysoft-api:latest
-        docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/vacaysoft-api:latest
+        docker build . --file src/VacaySoft.Api/Dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/vacaysoft-api:0.0.${{ github.run_number }} -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/vacaysoft-api:latest
+        docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/vacaysoft-api --all-tags
   
   develop:
     needs: build
