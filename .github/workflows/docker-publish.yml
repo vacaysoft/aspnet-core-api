@@ -70,7 +70,7 @@ jobs:
         app-name: vacaysoft-api
         mask-inputs: false
         slot-name: develop  # Optional and needed only if the settings have to be configured on the specific deployment slot
-        app-settings-json: '[{ "name": "Tag", "value": "${{ github.sha }}", "slotSetting": true },{ "name": "ASPNETCORE_ENVIRONMENT", "value": "Development", "slotSetting": true },{ "name": "Version", "value": "0.${{ github.run_id }}.${{ github.run_number }}", "slotSetting": true }]'
+        app-settings-json: '[{ "name": "Tag", "value": "${{ github.sha }}", "slotSetting": true },{ "name": "ASPNETCORE_ENVIRONMENT", "value": "Development", "slotSetting": true },{ "name": "Version", "value": "0.0.${{ github.run_number }}", "slotSetting": true }]'
       id: settings
 
   staging:
@@ -110,7 +110,7 @@ jobs:
         app-name: vacaysoft-api
         mask-inputs: false
         slot-name: staging  # Optional and needed only if the settings have to be configured on the specific deployment slot
-        app-settings-json: '[{ "name": "Tag", "value": "${{ github.sha }}", "slotSetting": true },{ "name": "ASPNETCORE_ENVIRONMENT", "value": "Development", "slotSetting": true },{ "name": "Version", "value": "0.${{ github.run_id }}.${{ github.run_number }}", "slotSetting": true }]'
+        app-settings-json: '[{ "name": "Tag", "value": "${{ github.sha }}", "slotSetting": true },{ "name": "ASPNETCORE_ENVIRONMENT", "value": "Development", "slotSetting": true },{ "name": "Version", "value": "0.0.${{ github.run_number }}", "slotSetting": true }]'
       id: settings
 
   production:
@@ -148,6 +148,6 @@ jobs:
         app-name: vacaysoft-api
         mask-inputs: false
         #slot-name: # Optional and needed only if the settings have to be configured on the specific deployment slot
-        app-settings-json: '[{ "name": "Tag", "value": "${{ github.sha }}", "slotSetting": true },{ "name": "Version", "value": "0.${{ github.run_id }}.${{ github.run_number }}", "slotSetting": true }]'
+        app-settings-json: '[{ "name": "Tag", "value": "${{ github.sha }}", "slotSetting": true },{ "name": "Version", "value": "0.0.${{ github.run_number }}", "slotSetting": true }]'
       id: settings
 
