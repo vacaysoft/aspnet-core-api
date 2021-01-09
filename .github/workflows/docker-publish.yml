@@ -19,9 +19,9 @@ jobs:
       uses: actions/checkout@main
 
     - name: Push to GitHub Packages
-      uses: docker/build-push-action@v1
+      uses: docker/build-push-action@v2
       with:
-        username: ${{ github.actor }}
+        username: taipan-pr
         password: ${{ secrets.GITHUB_TOKEN }}
         registry: ghcr.io
         repository: vacaysoft/aspnet-core-api/vacaysoft-api
