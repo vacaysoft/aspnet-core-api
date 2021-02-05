@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\VacaySoft.Api\VacaySoft.Api.csproj" />
+    <ProjectReference Include="..\..\src\VacaySoft.Infrastructure\VacaySoft.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
