@@ -10,4 +10,10 @@
 			<_Parameter1>$(MSBuildProjectName).Test</_Parameter1>
 		</AssemblyAttribute>
 	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\VacaySoft.Domain\VacaySoft.Domain.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="DataTransferObjects\" />
+	</ItemGroup>
 </Project>

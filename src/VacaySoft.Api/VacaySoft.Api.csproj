@@ -23,4 +23,8 @@
 			<_Parameter1>$(MSBuildProjectName).Test</_Parameter1>
 		</AssemblyAttribute>
 	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\VacaySoft.Application\VacaySoft.Application.csproj" />
+	  <ProjectReference Include="..\VacaySoft.Infrastructure\VacaySoft.Infrastructure.csproj" />
+	</ItemGroup>
 </Project>

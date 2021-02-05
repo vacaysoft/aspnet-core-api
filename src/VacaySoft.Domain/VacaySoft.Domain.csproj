@@ -10,4 +10,8 @@
 			<_Parameter1>$(MSBuildProjectName).Test</_Parameter1>
 		</AssemblyAttribute>
 	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Entities\" />
+	  <Folder Include="Exceptions\" />
+	</ItemGroup>
 </Project>
