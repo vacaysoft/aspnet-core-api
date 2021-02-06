@@ -121,7 +121,7 @@ jobs:
       id: settings
 
   staging:
-    needs: develop
+    needs: [develop-mssql, develop-api]
     name: Deploy to staging
     environment:
       name: Staging
