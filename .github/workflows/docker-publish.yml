@@ -27,7 +27,7 @@ jobs:
   
   develop-mssql:
     needs: build
-    name: Migrate MSSQL Develop
+    name: DB Migration
     environment: Develop
     runs-on: windows-latest
     steps:
@@ -60,12 +60,12 @@ jobs:
         sql-file: mssql.sql
 
   develop-api:
-    needs: build
+    needs: develop-mssql
     name: Deploy to Development
     environment: 
       name: Develop
       url: https://vacaysoft-api-develop.azurewebsites.net/swagger
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
     - name: Login via Azure CLI Web
       uses: azure/login@v1
@@ -216,4 +216,3 @@ jobs:
             }
           ]
       id: settings
-
