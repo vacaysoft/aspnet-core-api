@@ -50,7 +50,7 @@ jobs:
     - name: Login via Azure CLI Web
       uses: azure/login@v1
       with:
-        creds: ${{ secrets.AZURE_MSSQL_CREDENTIAL }}
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     - name: Azure SQL Deploy (dacpac, file, folder)
     # You may pin to the exact commit or the version.
