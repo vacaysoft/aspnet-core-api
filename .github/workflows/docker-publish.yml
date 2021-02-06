@@ -25,15 +25,12 @@ jobs:
         docker build . --file src/VacaySoft.Api/Dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/vacaysoft-api:0.0.${{ github.run_number }} -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/vacaysoft-api:latest
         docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/vacaysoft-api
   
-  develop:
+  develop-mssql:
     needs: build
-    name: Deploy to Development
-    environment: 
-      name: Develop
-      url: https://vacaysoft-api-develop.azurewebsites.net/swagger
+    name: Migrate MSSQL Develop
+    environment: Develop
     runs-on: windows-latest
     steps:
-
     - name: Checkout GitHub Action
       uses: actions/checkout@main
       
@@ -50,11 +47,9 @@ jobs:
     - name: Login via Azure CLI Web
       uses: azure/login@v1
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        creds: ${{ secrets.AZURE_MSSQL_CREDENTIAL }}
 
-    - name: Azure SQL Deploy (dacpac, file, folder)
-    # You may pin to the exact commit or the version.
-    # uses: XLipcak/sql-action@1b2b1ea66beb232831e97be2be8382be8f006840
+    - name: Azure SQL Deploy
       uses: Azure/sql-action@v1
       with:
         # Name of the Azure SQL Server name, like Fabrikam.database.windows.net.
@@ -63,7 +58,15 @@ jobs:
         connection-string: ${{ secrets.MSSQL_CONNECTIONSTRING }}
         # Path to SQL script file. *.sql or a folder to deploy
         sql-file: mssql.sql
-        
+
+  develop-api:
+    needs: build
+    name: Deploy to Development
+    environment: 
+      name: Develop
+      url: https://vacaysoft-api-develop.azurewebsites.net/swagger
+    runs-on: windows-latest
+    steps:
     - name: Login via Azure CLI Web
       uses: azure/login@v1
       with:
