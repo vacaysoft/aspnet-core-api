@@ -7,7 +7,7 @@ on:
       - main
 
 jobs:
-  build:
+  build-docker:
     name: Docker Build
     runs-on: ubuntu-latest
     steps:
@@ -24,16 +24,15 @@ jobs:
     - run: |
         docker build . --file src/VacaySoft.Api/Dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/vacaysoft-api:0.0.${{ github.run_number }} -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/vacaysoft-api:latest
         docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/vacaysoft-api
-  
-  develop-mssql:
-    needs: build
-    name: DB Migration
-    environment: Develop
-    runs-on: windows-latest
+
+  build-sql:
+    name: MSSQL Build
+    runs-on: ubuntu-latest
     steps:
+    # checkout the repo
     - name: Checkout GitHub Action
       uses: actions/checkout@main
-      
+
     - name: Install EF Core tools
       uses: actions/setup-dotnet@v1
       with:
@@ -42,8 +41,14 @@ jobs:
         dotnet tool install --global dotnet-ef
         dotnet tool restore
         dotnet restore
-        dotnet ef migrations script -o mssql.sql -i -p src/VacaySoft.Infrastructure/VacaySoft.Infrastructure.csproj -s src/VacaySoft.Api/VacaySoft.Api.csproj
+        dotnet ef migrations script -o $GITHUB_PATH -i -p src/VacaySoft.Infrastructure/VacaySoft.Infrastructure.csproj -s src/VacaySoft.Api/VacaySoft.Api.csproj
         
+  develop-mssql:
+    needs: [build-docker, build-sql]
+    name: DB Migration (Develop)
+    environment: Develop
+    runs-on: windows-latest
+    steps:
     - name: Login via Azure CLI Web
       uses: azure/login@v1
       with:
@@ -57,10 +62,10 @@ jobs:
         # The connection string, including authentication information, for the Azure SQL Server database.
         connection-string: ${{ secrets.MSSQL_CONNECTIONSTRING }}
         # Path to SQL script file. *.sql or a folder to deploy
-        sql-file: mssql.sql
+        sql-file: $env:GITHUB_PATH
 
   develop-api:
-    needs: build
+    needs: [build-docker, build-sql]
     name: Deploy to Development
     environment: 
       name: Develop
@@ -122,7 +127,7 @@ jobs:
 
   staging-mssql:
     needs: [develop-mssql, develop-api]
-    name: DB Migration
+    name: DB Migration (Staging)
     environment: Staging
     runs-on: windows-latest
     steps:
@@ -208,7 +213,7 @@ jobs:
 
   production-mssql:
     needs: [staging-mssql, staging-api]
-    name: DB Migration
+    name: DB Migration (Production)
     environment: Staging
     runs-on: windows-latest
     steps:
