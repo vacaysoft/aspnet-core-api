@@ -41,8 +41,14 @@ jobs:
         dotnet tool install --global dotnet-ef
         dotnet tool restore
         dotnet restore
-        dotnet ef migrations script -o $GITHUB_PATH -i -p src/VacaySoft.Infrastructure/VacaySoft.Infrastructure.csproj -s src/VacaySoft.Api/VacaySoft.Api.csproj
-        
+        dotnet ef migrations script -o mssql.sql -i -p src/VacaySoft.Infrastructure/VacaySoft.Infrastructure.csproj -s src/VacaySoft.Api/VacaySoft.Api.csproj
+    
+    - name: Archive production artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: mssql
+        path: mssql.sql
+
   develop-mssql:
     needs: [build-docker, build-sql]
     name: DB Migration (Develop)
@@ -54,6 +60,11 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_MSSQL_CREDENTIAL }}
 
+    - name: Download a single artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: mssql
+
     - name: Azure SQL Deploy
       uses: Azure/sql-action@v1
       with:
@@ -62,7 +73,7 @@ jobs:
         # The connection string, including authentication information, for the Azure SQL Server database.
         connection-string: ${{ secrets.MSSQL_CONNECTIONSTRING }}
         # Path to SQL script file. *.sql or a folder to deploy
-        sql-file: $env:GITHUB_PATH
+        sql-file: mssql.sql
 
   develop-api:
     needs: [build-docker, build-sql]
