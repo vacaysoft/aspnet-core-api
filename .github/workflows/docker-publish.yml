@@ -226,7 +226,7 @@ jobs:
   production-mssql:
     needs: [staging-mssql, staging-api]
     name: DB Migration (Production)
-    environment: Staging
+    environment: Production
     runs-on: windows-latest
     steps:
     - name: Login via Azure CLI Web
