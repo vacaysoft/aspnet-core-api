@@ -116,7 +116,7 @@ jobs:
           [
             {
               "name": "Default",
-              "value": "@Microsoft.KeyVault(SecretUri=https://vacaysoft-kv.vault.azure.net/secrets/Develop--ConnectionString--Default/b66694b95c9a49c2a4f444ae95a50d25/)",
+              "value": "${{ secrets.MSSQL_CONNECTIONSTRING }}",
               "type": "SQLAzure",
               "slotSetting": true
             }
@@ -203,7 +203,7 @@ jobs:
           [
             {
               "name": "Default",
-              "value": "@Microsoft.KeyVault(SecretUri=https://vacaysoft-kv.vault.azure.net/secrets/Staging--ConnectionString--Default/312e375c5ee54076868c08dda802ea0c/)",
+              "value": "${{ secrets.MSSQL_CONNECTIONSTRING }}",
               "type": "SQLAzure",
               "slotSetting": true
             }
@@ -288,7 +288,7 @@ jobs:
           [
             {
               "name": "Default",
-              "value": "@Microsoft.KeyVault(SecretUri=https://vacaysoft-kv.vault.azure.net/secrets/Production--ConnectionString--Default/c0eef5edc35a47928de90322fe304dc4/)",
+              "value": "${{ secrets.MSSQL_CONNECTIONSTRING }}",
               "type": "SQLAzure",
               "slotSetting": true
             }
