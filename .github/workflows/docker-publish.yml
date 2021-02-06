@@ -31,7 +31,7 @@ jobs:
     environment: 
       name: Develop
       url: https://vacaysoft-api-develop.azurewebsites.net/swagger
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
 
     - name: Login via Azure CLI MSSQL
