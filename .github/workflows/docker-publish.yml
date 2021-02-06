@@ -50,7 +50,24 @@ jobs:
         dotnet tool install --global dotnet-ef
         dotnet tool restore
         dotnet restore
-        dotnet ef database update -p src/VacaySoft.Infrastructure/VacaySoft.Infrastructure.csproj -s src/VacaySoft.Api/VacaySoft.Api.csproj --connection "${{ secrets.MSSQL_CONNECTIONSTRING }}"
+        dotnet ef migrations script -o mssql.sql -i -p src/VacaySoft.Infrastructure/VacaySoft.Infrastructure.csproj -s src/VacaySoft.Api/VacaySoft.Api.csproj
+        
+    - name: Login via Azure CLI Web
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_MSSQL_CREDENTIAL }}
+
+    - name: Azure SQL Deploy (dacpac, file, folder)
+    # You may pin to the exact commit or the version.
+    # uses: XLipcak/sql-action@1b2b1ea66beb232831e97be2be8382be8f006840
+      uses: XLipcak/sql-action@v1.0.5
+      with:
+        # Name of the Azure SQL Server name, like Fabrikam.database.windows.net.
+        server-name: vacaysoft
+        # The connection string, including authentication information, for the Azure SQL Server database.
+        connection-string: ${{ secrets.MSSQL_CONNECTIONSTRING }}
+        # Path to SQL script file. *.sql or a folder to deploy
+        sql-file: mssql.sql
         
     - name: Login via Azure CLI Web
       uses: azure/login@v1
