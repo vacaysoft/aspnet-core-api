@@ -60,7 +60,7 @@ jobs:
         sql-file: mssql.sql
 
   develop-api:
-    needs: develop-mssql
+    needs: build
     name: Deploy to Development
     environment: 
       name: Develop
@@ -120,7 +120,41 @@ jobs:
           ]
       id: settings
 
-  staging:
+  staging-mssql:
+    needs: [develop-mssql, develop-api]
+    name: DB Migration
+    environment: Staging
+    runs-on: windows-latest
+    steps:
+    - name: Checkout GitHub Action
+      uses: actions/checkout@main
+      
+    - name: Install EF Core tools
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '5.0'
+    - run: |
+        dotnet tool install --global dotnet-ef
+        dotnet tool restore
+        dotnet restore
+        dotnet ef migrations script -o mssql.sql -i -p src/VacaySoft.Infrastructure/VacaySoft.Infrastructure.csproj -s src/VacaySoft.Api/VacaySoft.Api.csproj
+        
+    - name: Login via Azure CLI Web
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_MSSQL_CREDENTIAL }}
+
+    - name: Azure SQL Deploy
+      uses: Azure/sql-action@v1
+      with:
+        # Name of the Azure SQL Server name, like Fabrikam.database.windows.net.
+        server-name: vacaysoft.database.windows.net
+        # The connection string, including authentication information, for the Azure SQL Server database.
+        connection-string: ${{ secrets.MSSQL_CONNECTIONSTRING }}
+        # Path to SQL script file. *.sql or a folder to deploy
+        sql-file: mssql.sql
+
+  staging-api:
     needs: [develop-mssql, develop-api]
     name: Deploy to staging
     environment:
@@ -155,7 +189,7 @@ jobs:
       uses: azure/appservice-settings@v1
       with:
         app-name: vacaysoft-api
-        mask-inputs: false
+        mask-inputs: true
         slot-name: staging  # Optional and needed only if the settings have to be configured on the specific deployment slot
         app-settings-json: |
           [
@@ -172,8 +206,42 @@ jobs:
           ]
       id: settings
 
-  production:
-    needs: staging
+  production-mssql:
+    needs: [staging-mssql, staging-api]
+    name: DB Migration
+    environment: Staging
+    runs-on: windows-latest
+    steps:
+    - name: Checkout GitHub Action
+      uses: actions/checkout@main
+      
+    - name: Install EF Core tools
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '5.0'
+    - run: |
+        dotnet tool install --global dotnet-ef
+        dotnet tool restore
+        dotnet restore
+        dotnet ef migrations script -o mssql.sql -i -p src/VacaySoft.Infrastructure/VacaySoft.Infrastructure.csproj -s src/VacaySoft.Api/VacaySoft.Api.csproj
+        
+    - name: Login via Azure CLI Web
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_MSSQL_CREDENTIAL }}
+
+    - name: Azure SQL Deploy
+      uses: Azure/sql-action@v1
+      with:
+        # Name of the Azure SQL Server name, like Fabrikam.database.windows.net.
+        server-name: vacaysoft.database.windows.net
+        # The connection string, including authentication information, for the Azure SQL Server database.
+        connection-string: ${{ secrets.MSSQL_CONNECTIONSTRING }}
+        # Path to SQL script file. *.sql or a folder to deploy
+        sql-file: mssql.sql
+
+  production-api:
+    needs: [staging-mssql, staging-api]
     name: Deploy to production
     environment: Production
     runs-on: ubuntu-latest
@@ -205,7 +273,7 @@ jobs:
       uses: azure/appservice-settings@v1
       with:
         app-name: vacaysoft-api
-        mask-inputs: false
+        mask-inputs: true
         #slot-name: # Optional and needed only if the settings have to be configured on the specific deployment slot
         app-settings-json: |
           [
