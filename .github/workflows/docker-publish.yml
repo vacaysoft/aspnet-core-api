@@ -12,10 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     # checkout the repo
-    - name: 'Checkout GitHub Action'
+    - name: Checkout GitHub Action
       uses: actions/checkout@main
       
-    - name: 'Build and push image'
+    - name: Build and push image
       uses: azure/docker-login@v1
       with:
         login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
@@ -33,11 +33,15 @@ jobs:
       url: https://vacaysoft-api-develop.azurewebsites.net/swagger
     runs-on: ubuntu-latest
     steps:
-    - name: 'Login via Azure CLI'
+
+    - name: Login via Azure CLI
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+    - name: Checkout GitHub Action
+      uses: actions/checkout@main
+      
     - name: Install EF Core tools
       uses: actions/setup-dotnet@v1
       with:
