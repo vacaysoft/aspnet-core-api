@@ -34,10 +34,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-    - name: Login via Azure CLI
+    - name: Login via Azure CLI MSSQL
       uses: azure/login@v1
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        creds: ${{ secrets.AZURE_MSSQL_CREDENTIAL }}
 
     - name: Checkout GitHub Action
       uses: actions/checkout@main
@@ -51,6 +51,11 @@ jobs:
         dotnet tool restore
         dotnet restore
         dotnet ef database update -p src/VacaySoft.Infrastructure/VacaySoft.Infrastructure.csproj -s src/VacaySoft.Api/VacaySoft.Api.csproj --connection "${{ secrets.MSSQL_CONNECTIONSTRING }}"
+        
+    - name: Login via Azure CLI Web
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
         
     - name: Azure WebApp
       uses: Azure/webapps-deploy@v2
