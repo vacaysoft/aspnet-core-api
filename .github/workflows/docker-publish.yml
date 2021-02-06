@@ -31,7 +31,7 @@ jobs:
     environment: 
       name: Develop
       url: https://vacaysoft-api-develop.azurewebsites.net/swagger
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
 
     - name: Checkout GitHub Action
@@ -94,9 +94,14 @@ jobs:
         mask-inputs: true
         slot-name: develop  # Optional and needed only if the settings have to be configured on the specific deployment slot
         connection-strings-json: |
+          [
             {
-              "ConnectionStrings": { "Default": "${{ secrets.MSSQL_CONNECTIONSTRING }}" }
+              "name": "Default",
+              "value": "${{ secrets.MSSQL_CONNECTIONSTRING }}",
+              "type": "SQLAzure",
+              "slotSetting": true
             }
+          ]
         app-settings-json: |
           [
             {
