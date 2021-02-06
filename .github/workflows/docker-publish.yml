@@ -94,7 +94,7 @@ jobs:
         # Name of the Azure Web App
         app-name: vacaysoft-api
         # Applies to Web Apps(Windows and Linux) and Web App Containers(linux). Multi container scenario not supported. Publish profile (*.publishsettings) file contents with Web Deploy secrets
-        publish-profile: ${{ secrets.PUBLISHING_PROFILE }} # optional
+        publish-profile: ${{ secrets.PUBLISHING_PROFILE }}
         # Enter an existing Slot other than the Production slot
         slot-name: develop # optional, default is production
         # Applies to Web App only: Path to package or folder. *.zip, *.war, *.jar or a folder to deploy
@@ -181,7 +181,7 @@ jobs:
         # Name of the Azure Web App
         app-name: vacaysoft-api
         # Applies to Web Apps(Windows and Linux) and Web App Containers(linux). Multi container scenario not supported. Publish profile (*.publishsettings) file contents with Web Deploy secrets
-        publish-profile: ${{ secrets.PUBLISHING_PROFILE }}# optional
+        publish-profile: ${{ secrets.PUBLISHING_PROFILE }}
         # Enter an existing Slot other than the Production slot
         slot-name: staging # optional, default is production
         # Applies to Web App only: Path to package or folder. *.zip, *.war, *.jar or a folder to deploy
@@ -266,7 +266,7 @@ jobs:
         # Name of the Azure Web App
         app-name: vacaysoft-api
         # Applies to Web Apps(Windows and Linux) and Web App Containers(linux). Multi container scenario not supported. Publish profile (*.publishsettings) file contents with Web Deploy secrets
-        publish-profile: ${{ secrets.PUBLISHING_PROFILE }}# optional
+        publish-profile: ${{ secrets.PUBLISHING_PROFILE }}
         # Enter an existing Slot other than the Production slot
         #slot-name: # optional, default is production
         # Applies to Web App only: Path to package or folder. *.zip, *.war, *.jar or a folder to deploy
