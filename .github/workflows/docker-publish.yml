@@ -142,23 +142,15 @@ jobs:
     environment: Staging
     runs-on: windows-latest
     steps:
-    - name: Checkout GitHub Action
-      uses: actions/checkout@main
-      
-    - name: Install EF Core tools
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '5.0'
-    - run: |
-        dotnet tool install --global dotnet-ef
-        dotnet tool restore
-        dotnet restore
-        dotnet ef migrations script -o mssql.sql -i -p src/VacaySoft.Infrastructure/VacaySoft.Infrastructure.csproj -s src/VacaySoft.Api/VacaySoft.Api.csproj
-        
     - name: Login via Azure CLI Web
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_MSSQL_CREDENTIAL }}
+
+    - name: Download a single artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: mssql
 
     - name: Azure SQL Deploy
       uses: Azure/sql-action@v1
@@ -228,23 +220,15 @@ jobs:
     environment: Staging
     runs-on: windows-latest
     steps:
-    - name: Checkout GitHub Action
-      uses: actions/checkout@main
-      
-    - name: Install EF Core tools
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '5.0'
-    - run: |
-        dotnet tool install --global dotnet-ef
-        dotnet tool restore
-        dotnet restore
-        dotnet ef migrations script -o mssql.sql -i -p src/VacaySoft.Infrastructure/VacaySoft.Infrastructure.csproj -s src/VacaySoft.Api/VacaySoft.Api.csproj
-        
     - name: Login via Azure CLI Web
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_MSSQL_CREDENTIAL }}
+
+    - name: Download a single artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: mssql
 
     - name: Azure SQL Deploy
       uses: Azure/sql-action@v1
